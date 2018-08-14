@@ -8,6 +8,7 @@ function getAllIndexes(arr, val) {
     return indexes;
 }
 
+var counter = 0;
 
 $(document).ready(function(){
   function randomWord() {
@@ -30,18 +31,27 @@ $(".guess-form").submit(function(event){
 
   if ((/[A-Za-z]/).test(guessLetter) && guessLetter.length == 1){
     $("#usedletters").append(guessLetter);
-    if (mysteryWord.includes(guessLetter)){
 
+    if (mysteryWord.includes(guessLetter)){
       var indexes = getAllIndexes(mysteryWord, guessLetter);
       indexes.forEach(function(pos){
         blanks[pos] = guessLetter
         $("#blanks").html(blanks);
-
-
       })
-
+    } else {
+      counter += 1;
+      console.log(counter);
+      if(counter > 5){
+        alert("You lose! Play again!")
+        location.reload();
+      }
     }
   }
   $("#guess").val("");
+
+  if(blanks.includes("  __  ") === false){
+    alert("You win! Play again!");
+    location.reload();
+  };
   });
 });
