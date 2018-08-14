@@ -1,27 +1,47 @@
+var words = ["area", "book", "business", "case", "child", "company", "country", "day", "eye", "fact", "family", "government", "group", "hand", "home", "job", "life", "lot", "man", "money", "month", "mother", "Mr", "night", "number", "part", "people", "place", "point", "problem", "program", "question", "right", "room", "school", "state", "story", "student", "study", "system", "thing", "time", "water", "way", "week", "woman", "word", "work", "world", "year"];
 
-var n = 79;
-var numArray = [];
-//create a list of numbers 2 through n
-  for(i=2; i <= n; i++){
-    numArray.push(i);
-  }
-console.log(numArray + "first");
-
-//remove all multiples of prime
-numArray.forEach(function(num){
-if (num == ""){
-  console.log("nothing");
-}else {
-  for(x=2;(num*x)<=n;x++){
-    console.log(num);
-    numArray[(num * x) - 2] = "";
-    console.log(numArray);
-  }
+function getAllIndexes(arr, val) {
+    var indexes = [], i;
+    for(i = 0; i < arr.length; i++)
+        if (arr[i] === val)
+            indexes.push(i);
+    return indexes;
 }
+
+
+$(document).ready(function(){
+  function randomWord() {
+    return words[Math.floor(Math.random()*49)]
+  }
+
+  var mysteryWord = randomWord().split("");
+  var blanks = []
+  console.log(mysteryWord);
+  mysteryWord.forEach(function(letter){
+    blanks.push("  __  ")
+  });
+  $("#blanks").append(blanks);
+
+
+$(".guess-form").submit(function(event){
+  event.preventDefault();
+
+  var guessLetter = $("#guess").val().toLowerCase();
+
+  if ((/[A-Za-z]/).test(guessLetter) && guessLetter.length == 1){
+    $("#usedletters").append(guessLetter);
+    if (mysteryWord.includes(guessLetter)){
+
+      var indexes = getAllIndexes(mysteryWord, guessLetter);
+      indexes.forEach(function(pos){
+        blanks[pos] = guessLetter
+        $("#blanks").html(blanks);
+
+
+      })
+
+    }
+  }
+  $("#guess").val("");
+  });
 });
-
-//format and display results
-
-var result = numArray.join(" ");
-var result2 = result.replace(/[\s]{2,}/g," ");
-console.log(result2);
